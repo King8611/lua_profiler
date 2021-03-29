@@ -1,0 +1,3 @@
+﻿profiler.obj : error LNK2019: 无法解析的外部符号 _luaL_newstate，该符号在函数 _main 中被引用
+D:\lua53.lib : warning LNK4272: 库计算机类型“x64”与目标计算机类型“x86”冲突
+E:\code\lua\test_profile\profiler\Debug\profiler.exe : fatal error LNK1120: 1 个无法解析的外部命令

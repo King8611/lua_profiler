@@ -1,0 +1,7 @@
+﻿  profiler.c
+e:\code\lua\test_profile\profiler\profiler\profiler.c(66): warning C4047: “return”:“lua_CFunction”与“int”的间接级别不同
+e:\code\lua\test_profile\profiler\profiler\profiler.c(78): warning C4047: “函数”:“lua_CFunction”与“lua_CFunction (__cdecl *)(lua_State *)”的间接级别不同
+e:\code\lua\test_profile\profiler\profiler\profiler.c(78): warning C4024: “lua_pushcclosure”: 形参和实参 2 的类型不同
+e:\code\lua\test_profile\profiler\profiler\profiler.c(154): warning C4244: “初始化”: 从“lua_Integer”转换到“int”，可能丢失数据
+e:\code\lua\test_profile\profiler\profiler\profiler.c(155): warning C4244: “初始化”: 从“lua_Integer”转换到“int”，可能丢失数据
+  profiler.vcxproj -> E:\code\lua\test_profile\profiler\x64\Debug\profiler.exe
