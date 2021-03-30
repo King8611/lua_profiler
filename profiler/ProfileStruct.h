@@ -12,8 +12,9 @@ typedef struct HookStack {
 }HookStack;
 
 HookStack *CreateHookStack();
-FunctionInfo *Top(const HookStack *hookStack);
-void pop(HookStack *hookStack);
-void push(HookStack *hookStack, FunctionInfo *info);
+FunctionInfo *HookStackTop(const HookStack *hookStack);
+void HookStackPop(HookStack *hookStack);
+void HookStackPush(HookStack *hookStack, FunctionInfo *info);
+void HookStackDestroyed(HookStack *HookStack);
 
 #endif // !info_h
