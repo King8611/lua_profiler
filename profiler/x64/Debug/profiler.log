@@ -1,0 +1,8 @@
+﻿  Info.c
+e:\code\lua\test_profile\lua_profiler\profiler\tools.h(6): warning C4005: “ERROR”: 宏重定义
+  c:\program files (x86)\windows kits\10\include\10.0.17763.0\um\wingdi.h(118): note: 参见“ERROR”的前一个定义
+e:\code\lua\test_profile\lua_profiler\profiler\info.c(13): warning C4090: “函数”: 不同的“const”限定符
+e:\code\lua\test_profile\lua_profiler\profiler\info.c(37): warning C4013: “printf”未定义；假设外部返回 int
+e:\code\lua\test_profile\lua_profiler\profiler\info.c(40): warning C4090: “=”: 不同的“const”限定符
+e:\code\lua\test_profile\lua_profiler\profiler\info.c(44): warning C4013: “sprintf_s”未定义；假设外部返回 int
+  profiler.vcxproj -> E:\code\lua\test_profile\lua_profiler\x64\Debug\profiler.exe

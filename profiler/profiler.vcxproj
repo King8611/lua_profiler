@@ -158,6 +158,7 @@
     <ClCompile Include="Info.c" />
     <ClCompile Include="ProfileStruct.c" />
     <ClCompile Include="profiler.c" />
+    <ClCompile Include="tools.c" />
   </ItemGroup>
   <ItemGroup>
     <None Include="test.lua" />
@@ -170,6 +171,7 @@
     <ClInclude Include="lua.h" />
     <ClInclude Include="luaconf.h" />
     <ClInclude Include="lualib.h" />
+    <ClInclude Include="tools.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,32 +1,29 @@
-print("hello")
 local p = profile()
-p.start()
-
-local l = 1
-local function g(a)
-	if a <= 0 then
-		return 0
+function h()
+	local sum = 0
+	for i = 1, 100000 do
+		sum = sum + i
 	end
+	return sum+1
+end
 
-	return g(a-2)+l
+local function g()
+	local sum = 0
+	for i = 1, 1000 do
+		sum = sum + h()
+	end
+	return sum +h()+h()
 end
 
 local function f(a)
-	if a == 0 then
-		return 1
-	end
-	local x = g(a) - l
-	return f(a-1)*x
+	g()
+	h()
+	g()
 end
 
-local a = f(10)
-
---local p = profile()
---print("hello")
-
---print(p)
-
-
---p.start()
-
---foo(20)
+p.start()
+f(5)
+g()
+p.profile_log();
+p.stop()
+--p.stop()

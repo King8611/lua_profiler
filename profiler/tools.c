@@ -1,13 +1,21 @@
 #include "tools.h"
 #include "lua.h"
+#include <time.h>
+#ifdef WIN32
+#include <windows.h>
+#else
+#include <sys/time.h>
+#endif
 void dfsPirnt(FunctionInfo *info, int t) {
 	if (info == NULL) return;
 	for (int j = 0; j < t; j++)printf("--");
-	printf("%s %d\n", info->fName, info->count);
+	printf("%s  %d  %d.%06d\n", info->fName, info->count,info->costTime.tv_sec, info->costTime.tv_usec);
 	for (int i = 0; i < info->fCount; i++) {
 		dfsPirnt(info->infos[i], t+1);
 	}
 }
+//void PrintFunctionInfo(FunctionInfo *info, int isPrintChild);
+
 extern void PrintFunctionInfo(FunctionInfo *info, int isPrintChild) {
 	if (info == NULL) return;
 	if (!isPrintChild) {
@@ -38,14 +46,21 @@ extern void PrintLuaStack(lua_State *L)
 	printf("--Õ»µ×--\n");
 }
 
-extern void ERROR(const char *format, ...) {
-	//printf("PROFILER ERROR ");
-	//printf(format, ...);
-
-}
-extern void WARNING(const char *format, ...) {
-
-}
-extern void LOG(const char *format, ...) {
-
+extern int GetTimeOfDay(struct timeval *tp, void *tzp)
+{
+	time_t clock;
+	struct tm tm;
+	SYSTEMTIME wtm;
+	GetLocalTime(&wtm);
+	tm.tm_year = wtm.wYear - 1900;
+	tm.tm_mon = wtm.wMonth - 1;
+	tm.tm_mday = wtm.wDay;
+	tm.tm_hour = wtm.wHour;
+	tm.tm_min = wtm.wMinute;
+	tm.tm_sec = wtm.wSecond;
+	tm.tm_isdst = -1;
+	clock = mktime(&tm);
+	tp->tv_sec = clock;
+	tp->tv_usec = wtm.wMilliseconds * 1000;
+	return (0);
 }

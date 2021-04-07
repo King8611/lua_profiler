@@ -3,6 +3,7 @@
 
 #include <string.h>
 #include <stdlib.h>
+#include "tools.h"
 extern FunctionInfo *CreateFunctionInfo(char *fName) {
 	FunctionInfo *info = malloc(sizeof(FunctionInfo));
 	if (info == NULL) {
@@ -40,11 +41,18 @@ extern void AddChild(FunctionInfo *parent, const FunctionInfo *child) {
 }
 
 extern void BuildFunctionName(char *s, const lua_Debug *ar) {
-	sprintf_s(s, MAX_FUNCTION_NNAME_SIZE, "%s:%d %s", ar->short_src, ar->currentline, ar->name);
+	sprintf_s(s, MAX_FUNCTION_NNAME_SIZE, "%s:%d %s", ar->short_src, ar->linedefined, ar->name);
 }
 
 extern void CountToFunctionInfo(FunctionInfo *info) {
 	info->count++;
+	struct timeval nowTime;
+	GetTimeOfDay(&nowTime, NULL);
+	info->costTime.tv_sec += (nowTime.tv_sec) - (info->lastTime.tv_sec);
+	info->costTime.tv_usec += (nowTime.tv_usec) - (info->lastTime.tv_usec);
+	info->costTime.tv_usec += info->costTime.tv_sec * 1000000;
+	info->costTime.tv_sec = info->costTime.tv_usec / 1000000;
+	info->costTime.tv_usec %= 1000000;
 }
 
 extern void FunctionInfoDestroyed(FunctionInfo *info, int isDestoryChild) {
@@ -59,4 +67,8 @@ extern void FunctionInfoDestroyed(FunctionInfo *info, int isDestoryChild) {
 		FunctionInfoDestroyed(info->infos[i], isDestoryChild);
 	}
 	free(info);
+}
+
+extern void RefreshFunctionTime(FunctionInfo *info) {
+	GetTimeOfDay(&info->lastTime, NULL);
 }

@@ -9,18 +9,26 @@
 #include "Info.h"
 #include "ProfileStruct.h"
 #include "tools.h"
+
 void call_hook(lua_State *L, lua_Debug *ar) {
 	FunctionInfo *parentInfo = HookStackTop(hStack);
 	if (parentInfo == NULL) {
-		printf("PROFILE WARNING STACK TOP IS NULL");
+		WARNING("STACK TOP IS NULL");
 		return;
 	}
 	FunctionInfo *info = TryGetChildInfo(parentInfo, ar);
+	RefreshFunctionTime(info);
 	HookStackPush(hStack, info);
 }
 
 void return_hook(lua_State *L, lua_Debug *ar) {
+	char s[MAX_FUNCTION_NNAME_SIZE];
+	BuildFunctionName(s, ar);
 	FunctionInfo *info = HookStackTop(hStack);
+	if (strcmp(info->fName, s)) {
+		WARNING("return not match call");
+		return;
+	}
 	CountToFunctionInfo(info);
 	HookStackPop(hStack);
 }
@@ -42,7 +50,7 @@ extern lua_CFunction Start(lua_State *L) {
 	info = CreateFunctionInfo(base);
 	hStack = CreateHookStack();
 	if (info == NULL || hStack == NULL) {
-		printf("PROFILE ERROR:info or hStack is NULL\n");
+		ERROR("info or hStack is NULL");
 	}
 	HookStackPush(hStack, info);
 
