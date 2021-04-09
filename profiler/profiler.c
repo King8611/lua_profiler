@@ -11,26 +11,26 @@
 #include "tools.h"
 
 void call_hook(lua_State *L, lua_Debug *ar) {
-	FunctionInfo *parentInfo = HookStackTop(hStack);
+	FunctionInfo *parentInfo = HookStackTop(profile.hStack);
 	if (parentInfo == NULL) {
 		WARNING("STACK TOP IS NULL");
 		return;
 	}
 	FunctionInfo *info = TryGetChildInfo(parentInfo, ar);
 	RefreshFunctionTime(info);
-	HookStackPush(hStack, info);
+	HookStackPush(profile.hStack, info);
 }
 
 void return_hook(lua_State *L, lua_Debug *ar) {
-	char s[MAX_FUNCTION_NNAME_SIZE];
+	char s[MAX_NAME_SIZE];
 	BuildFunctionName(s, ar);
-	FunctionInfo *info = HookStackTop(hStack);
+	FunctionInfo *info = HookStackTop(profile.hStack);
 	if (strcmp(info->fName, s)) {
 		WARNING("return not match call");
 		return;
 	}
 	CountToFunctionInfo(info);
-	HookStackPop(hStack);
+	HookStackPop(profile.hStack);
 }
 
 void hook(lua_State *L, lua_Debug *ar) {
@@ -47,12 +47,12 @@ void hook(lua_State *L, lua_Debug *ar) {
 
 extern lua_CFunction Start(lua_State *L) {
 	printf("start\n");
-	info = CreateFunctionInfo(base);
-	hStack = CreateHookStack();
-	if (info == NULL || hStack == NULL) {
+	profile.info = CreateFunctionInfo(base);
+	profile.hStack = CreateHookStack();
+	if (profile.info == NULL || profile.hStack == NULL) {
 		ERROR("info or hStack is NULL");
 	}
-	HookStackPush(hStack, info);
+	HookStackPush(profile.hStack, profile.info);
 
 	lua_sethook(L, hook, LUA_MASKCALL|LUA_MASKRET, 0);
 
@@ -65,12 +65,12 @@ extern lua_CFunction Stop(lua_State *L) {
 }
 
 extern void DestroyedData() {
-	HookStackDestroyed(hStack);
-	FunctionInfoDestroyed(info, 1);
+	HookStackDestroyed(profile.hStack);
+	FunctionInfoDestroyed(profile.info, 1);
 }
 
 extern lua_CFunction LogInfo(lua_State *L){
-	PrintFunctionInfo(info, 1);
+	PrintFunctionInfo(profile.info, 1);
 }
 
 extern lua_CFunction push_tab(lua_State *l) {
@@ -88,16 +88,30 @@ extern lua_CFunction push_tab(lua_State *l) {
 	return 1;
 }
 
+static void *l_alloc(void *ud, void *ptr, size_t osize, size_t nsize) {
+	//(void)ud; (void)osize;  /* not used */
+	//lua_State *l = ((struct lua_S *)ud)->l;
+	//printf("ud = %p\n", ud);
+	//printf("l = %p\n", l);
+	if (nsize == 0) {
+		free(ptr);
+		return NULL;
+	}
+	else
+		return realloc(ptr, nsize);
+}
+
 int main()
 {
-	lua_State *l = luaL_newstate();
-	luaL_openlibs(l);
+	profile.l = lua_newstate(l_alloc, &profile);
+	luaL_openlibs(profile.l);
 
-	lua_pushcfunction(l, push_tab);
-	lua_setglobal(l, "profile");
+	lua_pushcfunction(profile.l, push_tab);
+	lua_setglobal(profile.l, "profile");
 
-	luaL_dofile(l, "test.lua");
-	lua_close(l);
+	luaL_dofile(profile.l, "test.lua");
+	lua_close(profile.l);
+	
 	system("pause");
 	return 0;
 }

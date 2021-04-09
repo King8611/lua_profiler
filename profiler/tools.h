@@ -6,8 +6,9 @@
 #define ERROR(format, ...) printf("PROFILER ERROR:" format "\n", ##__VA_ARGS__)
 #define WARNING(format, ...) printf("PROFILER WARNING:" format "\n", ##__VA_ARGS__)
 #define LOG(format, ...) printf("PROFILER LOG:" format "\n", ##__VA_ARGS__)
+#define false (0)
+#define true (1)
 typedef char bool;
-
 int GetTimeOfDay(struct timeval *tp, void *tzp);
 void PrintLuaStack(lua_State *L);
 void PrintFunctionInfo(struct FunctionInfo *info, int isPrintChild);

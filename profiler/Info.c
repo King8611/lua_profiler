@@ -10,7 +10,7 @@ extern FunctionInfo *CreateFunctionInfo(char *fName) {
 		return NULL;
 	}
 	memset(info, 0, sizeof(*info));
-	strcpy_s(info->fName, MAX_FUNCTION_NNAME_SIZE, fName);
+	strcpy_s(info->fName, MAX_NAME_SIZE, fName);
 	return info;
 }
 
@@ -18,7 +18,7 @@ extern FunctionInfo *TryGetChildInfo(FunctionInfo *parent,lua_Debug *ar) {
 	if (parent == NULL) {
 		return NULL;
 	}
-	char tmp[MAX_FUNCTION_NNAME_SIZE];
+	char tmp[MAX_NAME_SIZE];
 	BuildFunctionName(tmp, ar);
 	for (int i = 0; i < parent->fCount; i++) {
 		if (strcmp(tmp, parent->infos[i]->fName) == 0) {
@@ -41,7 +41,7 @@ extern void AddChild(FunctionInfo *parent, const FunctionInfo *child) {
 }
 
 extern void BuildFunctionName(char *s, const lua_Debug *ar) {
-	sprintf_s(s, MAX_FUNCTION_NNAME_SIZE, "%s:%d %s", ar->short_src, ar->linedefined, ar->name);
+	sprintf_s(s, MAX_NAME_SIZE, "%s:%d %s", ar->short_src, ar->linedefined, ar->name);
 }
 
 extern void CountToFunctionInfo(FunctionInfo *info) {

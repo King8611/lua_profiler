@@ -3,10 +3,15 @@
 #define PROFILE_H
 #include "Info.h"
 #include "ProfileStruct.h"
-FunctionInfo *info;
-HookStack *hStack;
+typedef struct Profile {
+	lua_State *l;
+	FunctionInfo *info;
+	HookStack *hStack;
+	Vector memoryInfos;
+}Profile;
 
-void PrintLuaStack(lua_State *L);
+Profile profile;
+
 lua_CFunction Start(lua_State *L);
 lua_CFunction Stop(lua_State *L);
 void DestroyedData();

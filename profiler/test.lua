@@ -16,14 +16,14 @@ local function g()
 end
 
 local function f(a)
-	g()
-	h()
-	g()
+	--g()
+	--h()
+	--g()
 end
 
 p.start()
 f(5)
-g()
+--g()
 p.profile_log();
 p.stop()
 --p.stop()
